@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DulceGestión - Control de Costos y Catálogo para Reposteras</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-stone-50 text-stone-800 antialiased">
+    <!-- HEADER / NAVBAR -->
+    <header
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">🧁</span>
+          <span class="font-bold text-xl text-rose-600">DulceGestión</span>
+        </div>
+        <nav
+          class="hidden md:flex space-x-8 text-sm font-medium text-stone-600"
+        >
+          <a href="#problema" class="hover:text-rose-600 transition"
+            >El Problema</a
+          >
+          <a href="#beneficios" class="hover:text-rose-600 transition"
+            >Beneficios</a
+          >
+          <a href="#prototipo" class="hover:text-rose-600 transition"
+            >Prototipo IA</a
+          >
+          <a href="#precios" class="hover:text-rose-600 transition">Planes</a>
+        </nav>
+        <div>
+          <a
+            href="#registro-beta"
+            class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md transition"
+          >
+            Unirme a la Beta
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section
+      class="py-16 md:py-24 bg-gradient-to-b from-rose-50/50 to-stone-50"
+    >
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span
+          class="inline-block bg-rose-100 text-rose-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4"
+        >
+          SaaS Exclusivo para Reposteras Independientes
+        </span>
+        <h1
+          class="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight mb-6"
+        >
+          Tu cocina, tu negocio rentable. <br /><span class="text-rose-600"
+            >Adiós al miedo a la inflación y al "Precio por DM".</span
+          >
+        </h1>
+        <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto mb-10">
+          Digitaliza tu libreta de recetas en segundos con Inteligencia
+          Artificial, calcula el costo exacto de tus tortas y blinda tus
+          ganancias sin hacer cuentas complejas.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a
+            href="#registro-beta"
+            class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg transition text-base"
+          >
+            Probar la Versión Beta Gratis
+          </a>
+          <a
+            href="#prototipo"
+            class="bg-white hover:bg-stone-100 text-stone-700 font-semibold px-8 py-3.5 rounded-xl border border-stone-300 transition text-base"
+          >
+            Ver cómo funciona
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EL PROBLEMA Y PÚBLICO OBJETIVO -->
+    <section id="problema" class="py-16 bg-white border-t border-stone-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl font-bold text-stone-900 mb-4">
+            El reto diario de la repostería independiente
+          </h2>
+          <p class="text-stone-600">
+            Diseñado específicamente para emprendedores (*home bakers*) que
+            hornean con pasión pero enfrentan serios dolores administrativos.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+            <div class="text-3xl mb-3">📈</div>
+            <h3 class="font-bold text-lg mb-2 text-stone-900">
+              Inflación Silenciosa
+            </h3>
+            <p class="text-sm text-stone-600">
+              Los precios de la harina, mantequilla y huevos cambian cada
+              semana, haciendo que vendas tus postres a pérdida sin darte
+              cuenta.
+            </p>
+          </div>
+          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+            <div class="text-3xl mb-3">📝</div>
+            <h3 class="font-bold text-lg mb-2 text-stone-900">
+              Libretas Complejas
+            </h3>
+            <p class="text-sm text-stone-600">
+              Odiar las hojas de cálculo y perder horas tratando de calcular
+              gramos y porciones en cuadernos de anotaciones manuales.
+            </p>
+          </div>
+          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+            <div class="text-3xl mb-3">💬</div>
+            <h3 class="font-bold text-lg mb-2 text-stone-900">
+              El desgaste del "Precio por DM"
+            </h3>
+            <p class="text-sm text-stone-600">
+              Perder clientes potenciales porque tardas horas en calcular el
+              presupuesto de un pedido especial por mensaje privado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS CLAVE -->
+    <section id="beneficios" class="py-16 bg-stone-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl font-bold text-stone-900 mb-4">
+            ¿Por qué elegir DulceGestión?
+          </h2>
+          <p class="text-stone-600">
+            Los pilares que transforman tu cocina artesanal en un negocio formal
+            y seguro.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
+          >
+            <span class="text-rose-600 font-bold text-xl">01</span>
+            <h4 class="font-bold text-stone-900 mt-2 mb-1">Tranquilidad</h4>
+            <p class="text-xs text-stone-600">
+              Alertas automáticas en tiempo real que te avisan cuándo y cuánto
+              subir a tus precios al subir los insumos.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
+          >
+            <span class="text-rose-600 font-bold text-xl">02</span>
+            <h4 class="font-bold text-stone-900 mt-2 mb-1">Simplicidad</h4>
+            <p class="text-xs text-stone-600">
+              Carga tus recetas tomando una simple foto a tu libreta manuscrita,
+              sin tipear ingrediente por ingrediente.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
+          >
+            <span class="text-rose-600 font-bold text-xl">03</span>
+            <h4 class="font-bold text-stone-900 mt-2 mb-1">Ahorro de Tiempo</h4>
+            <p class="text-xs text-stone-600">
+              Un catálogo web ("Link en Bio") donde tus clientes cotizan solos y
+              envían el pedido estructurado a tu WhatsApp.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
+          >
+            <span class="text-rose-600 font-bold text-xl">04</span>
+            <h4 class="font-bold text-stone-900 mt-2 mb-1">Valor Económico</h4>
+            <p class="text-xs text-stone-600">
+              Protege tu margen de ganancia real para que cada venta cubra tu
+              esfuerzo, servicios e ingredientes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESENTACIÓN DEL PROTOTIPO -->
+    <section id="prototipo" class="py-16 bg-white border-t border-stone-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl font-bold text-stone-900 mb-4">
+            Así funciona nuestro Prototipo
+          </h2>
+          <p class="text-stone-600">
+            Un flujo pensado para el uso diario desde tu celular.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+          <div class="p-4">
+            <div
+              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
+            >
+              📸
+            </div>
+            <h3 class="font-bold mb-2">1. Escanea tu Libreta</h3>
+            <p class="text-xs text-stone-600">
+              Toma una foto a tu receta escrita a mano. La IA de Google Gemini
+              extrae automáticamente los ingredientes.
+            </p>
+          </div>
+          <div class="p-4">
+            <div
+              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
+            >
+              ⚖️
+            </div>
+            <h3 class="font-bold mb-2">2. Costeo en Cadena</h3>
+            <p class="text-xs text-stone-600">
+              Modifica el precio de la harina una vez y el sistema actualizará
+              los costos de todas tus tortas afectadas.
+            </p>
+          </div>
+          <div class="p-4">
+            <div
+              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
+            >
+              📱
+            </div>
+            <h3 class="font-bold mb-2">3. Vende por WhatsApp</h3>
+            <p class="text-xs text-stone-600">
+              Comparte tu catálogo digital interactivo y recibe pedidos claros
+              con el margen de ganancia asegurado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANES Y PRECIOS -->
+    <section id="precios" class="py-16 bg-stone-50 border-t border-stone-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl font-bold text-stone-900 mb-4">
+            Planes accesibles para comenzar
+          </h2>
+          <p class="text-stone-600">
+            Empieza gratis y escoge el nivel ideal para profesionalizar tu
+            repostería.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+          <!-- Plan Emprendedor -->
+          <div
+            class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between"
+          >
+            <div>
+              <h3 class="font-bold text-xl mb-2 text-stone-900">
+                Plan Emprendedor
+              </h3>
+              <p class="text-stone-500 text-sm mb-6">
+                Ideal para iniciar en el mundo digital.
+              </p>
+              <div class="text-3xl font-extrabold mb-6">
+                $0
+                <span class="text-sm font-normal text-stone-500"
+                  >/ siempre</span
+                >
+              </div>
+              <ul class="space-y-3 text-sm text-stone-600 mb-8">
+                <li>✓ Catálogo web básico (hasta 3 productos)</li>
+                <li>✓ Enlace directo a WhatsApp</li>
+                <li>✓ Ingreso manual de recetas</li>
+              </ul>
+            </div>
+            <a
+              href="#registro-beta"
+              class="block text-center bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold py-3 rounded-xl transition"
+              >Empezar Gratis</a
+            >
+          </div>
+          <!-- Plan Profesional -->
+          <div
+            class="bg-white p-8 rounded-2xl border-2 border-rose-600 shadow-md flex flex-col justify-between relative"
+          >
+            <span
+              class="absolute -top-3 right-8 bg-rose-600 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase"
+              >Más Popular</span
+            >
+            <div>
+              <h3 class="font-bold text-xl mb-2 text-stone-900">
+                Plan Profesional
+              </h3>
+              <p class="text-stone-500 text-sm mb-6">
+                Para reposteras que quieren blindar sus ganancias.
+              </p>
+              <div class="text-3xl font-extrabold mb-6">
+                $7.99
+                <span class="text-sm font-normal text-stone-500">/ mes</span>
+              </div>
+              <ul class="space-y-3 text-sm text-stone-600 mb-8">
+                <li>✓ <strong>Escáner de recetas por IA</strong></li>
+                <li>✓ Recetas y catálogos ilimitados</li>
+                <li>✓ Alertas de inflación en tiempo real</li>
+                <li>✓ Generador de presupuestos en PDF</li>
+              </ul>
+            </div>
+            <a
+              href="#registro-beta"
+              class="block text-center bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl transition"
+              >Obtener Prueba de 14 Días</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULARIO DE REGISTRO A LA BETA (CONECTADO A SUPABASE) -->
+    <section
+      id="registro-beta"
+      class="py-16 bg-white border-t border-stone-200"
+    >
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold text-stone-900 mb-2">
+            Únete a la Lista de Espera Beta
+          </h2>
+          <p class="text-stone-600 text-sm">
+            Completa tus datos para asegurar acceso preferencial y 1 mes
+            gratuito del Plan Pro.
+          </p>
+        </div>
+
+        <form
+          id="betaForm"
+          class="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm space-y-5"
+        >
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1"
+              >Nombre Completo *</label
+            >
+            <input
+              type="text"
+              id="nombre"
+              required
+              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
+              placeholder="Ej. María Gómez"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1"
+              >Correo Electrónico *</label
+            >
+            <input
+              type="email"
+              id="correo"
+              required
+              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
+              placeholder="tucorreo@email.com"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1"
+              >Perfil o Nombre de tu Emprendimiento *</label
+            >
+            <input
+              type="text"
+              id="perfil_o_empresa"
+              required
+              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
+              placeholder="Ej. @DulceTentacionTarija"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1"
+              >¿Cuál es tu mayor reto o necesidad al poner precios? *</label
+            >
+            <select
+              id="necesidad"
+              required
+              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm bg-white"
+            >
+              <option value="">Selecciona una opción...</option>
+              <option value="Perdida por inflacion">
+                Perder dinero cuando suben los insumos
+              </option>
+              <option value="Complejidad de planillas">
+                Me aburre o confunde usar Excel
+              </option>
+              <option value="Desgaste por Precio por DM">
+                Pierdo clientes respondiendo precios por mensaje
+              </option>
+              <option value="Otro">Otro dolor financiero</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1"
+              >Plan de Interés *</label
+            >
+            <select
+              id="interes"
+              required
+              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm bg-white"
+            >
+              <option value="Plan Profesional (Pro)">
+                Plan Profesional (Con Escáner IA y Alertas)
+              </option>
+              <option value="Plan Emprendedor (Gratis)">
+                Plan Emprendedor (Gratis / Catálogo Básico)
+              </option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            id="submitBtn"
+            class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl shadow-md transition text-sm"
+          >
+            Inscribirme a la Beta
+          </button>
+
+          <!-- Mensajes de Estado -->
+          <div
+            id="formMessage"
+            class="hidden p-4 rounded-lg text-sm text-center"
+          ></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+      <p>
+        &copy; 2026 DulceGestión. Proyecto Académico de Validación SaaS. Todos
+        los derechos reservados.
+      </p>
+    </footer>
+
+    <!-- SCRIPT DE INTEGRACIÓN CON SUPABASE Y VALIDACIÓN -->
+    <script>
+      // Configuración de Supabase (Credenciales públicas seguras con clave Anónima)
+      const SUPABASE_URL = "https://vdaudlooggsqihmydbud.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_JZyUb9uAZi6dB9rhr463AQ_DhWD4tFs";
+
+      // Inicializar cliente de Supabase
+      const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+      );
+
+      const form = document.getElementById("betaForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const formMessage = document.getElementById("formMessage");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Recoger datos del formulario
+        const nombre = document.getElementById("nombre").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const perfil_o_empresa = document
+          .getElementById("perfil_o_empresa")
+          .value.trim();
+        const necesidad = document.getElementById("necesidad").value;
+        const interes = document.getElementById("interes").value;
+
+        // Validación simple en JavaScript
+        if (!nombre || !correo || !perfil_o_empresa || !necesidad || !interes) {
+          showFeedback(
+            "Por favor completa todos los campos requeridos.",
+            "error",
+          );
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Enviando registro...";
+
+        try {
+          // Inserción en la tabla de Supabase (FN0)
+          const { data, error } = await supabaseClient
+            .from("beta_registrations")
+            .insert([{ nombre, correo, perfil_o_empresa, necesidad, interes }]);
+
+          if (error) throw error;
+
+          showFeedback(
+            "¡Registro exitoso! Te hemos agregado a la lista beta prioritaria. Nos pondremos en contacto.",
+            "success",
+          );
+          form.reset();
+        } catch (err) {
+          console.error("Error al registrar:", err.message);
+          showFeedback(
+            "Hubo un error al registrar tus datos. Por favor intenta de nuevo.",
+            "error",
+          );
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Inscribirme a la Beta";
+        }
+      });
+
+      function showFeedback(message, type) {
+        formMessage.textContent = message;
+        formMessage.classList.remove(
+          "hidden",
+          "bg-emerald-100",
+          "text-emerald-700",
+          "bg-rose-100",
+          "text-rose-700",
+        );
+        if (type === "success") {
+          formMessage.classList.add("bg-emerald-100", "text-emerald-800");
+        } else {
+          formMessage.classList.add("bg-rose-100", "text-rose-800");
+        }
+      }
+    </script>
+  </body>
+</html>
