@@ -3,465 +3,987 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DulceGestión - Control de Costos y Catálogo para Reposteras</title>
-    <!-- Tailwind CSS CDN -->
+    <title>BakeIA — Costos, recetas por IA y catálogo para reposteras</title>
+    <meta
+      name="description"
+      content="BakeIA digitaliza tu libreta de recetas con inteligencia artificial, calcula el costo exacto de cada postre y te da un catálogo digital para vender sin perder margen."
+    />
+    <meta name="theme-color" content="#FAF3EB" />
+    <meta property="og:title" content="BakeIA — Gestión de costos para home bakers" />
+    <meta
+      property="og:description"
+      content="Escanea recetas a mano, costea en segundos y vende con un catálogo digital. Hecho para reposteras independientes."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234A2E2B'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia' font-size='16' fill='%23FAF3EB'%3EB%3C/text%3E%3C/svg%3E" />
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: "#FAF3EB",
+              chocolate: "#4A2E2B",
+              accent: "#D96B82",
+            },
+            fontFamily: {
+              serif: ['"Playfair Display"', "Georgia", "serif"],
+              sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 24px 60px -28px rgba(74, 46, 43, 0.35)",
+            },
+          },
+        },
+      };
+    </script>
+
     <style>
       body {
-        font-family: "Poppins", sans-serif;
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        background: #faf3eb;
+        color: #4a2e2b;
+      }
+
+      .scan-line {
+        animation: scanSweep 2.8s ease-in-out infinite;
+      }
+
+      @keyframes scanSweep {
+        0% {
+          top: 8%;
+          opacity: 0;
+        }
+        12% {
+          opacity: 1;
+        }
+        88% {
+          opacity: 1;
+        }
+        100% {
+          top: 88%;
+          opacity: 0;
+        }
+      }
+
+      .ingredient-row {
+        animation: fadeUp 0.55s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .paper-bg {
+        background-image:
+          linear-gradient(rgba(74, 46, 43, 0.04) 1px, transparent 1px);
+        background-size: 100% 28px;
       }
     </style>
   </head>
-  <body class="bg-stone-50 text-stone-800 antialiased">
-    <!-- HEADER / NAVBAR -->
+  <body class="bg-cream text-chocolate antialiased">
+    <!-- HEADER -->
     <header
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200"
+      class="sticky top-0 z-50 border-b border-chocolate/10 bg-cream/90 backdrop-blur-md"
     >
       <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+        class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8"
       >
-        <div class="flex items-center space-x-2">
-          <span class="text-2xl">🧁</span>
-          <span class="font-bold text-xl text-rose-600">DulceGestión</span>
-        </div>
+        <a href="#inicio" class="flex items-center gap-3">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-full border border-chocolate/20 bg-chocolate text-cream"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3c1.8 2.4 3 5.1 3 7.8A3 3 0 1 1 9 10.8C9 8.1 10.2 5.4 12 3Z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 19h8M9.5 16h5"
+              />
+            </svg>
+          </span>
+          <span class="font-serif text-2xl tracking-tight">BakeIA</span>
+        </a>
+
         <nav
-          class="hidden md:flex space-x-8 text-sm font-medium text-stone-600"
+          class="hidden items-center gap-8 text-sm font-medium text-chocolate/70 md:flex"
         >
-          <a href="#problema" class="hover:text-rose-600 transition"
-            >El Problema</a
-          >
-          <a href="#beneficios" class="hover:text-rose-600 transition"
-            >Beneficios</a
-          >
-          <a href="#prototipo" class="hover:text-rose-600 transition"
-            >Prototipo IA</a
-          >
-          <a href="#precios" class="hover:text-rose-600 transition">Planes</a>
+          <a href="#problema" class="transition hover:text-accent">El problema</a>
+          <a href="#beneficios" class="transition hover:text-accent">Beneficios</a>
+          <a href="#escaner" class="transition hover:text-accent">Escáner IA</a>
+          <a href="#precios" class="transition hover:text-accent">Planes</a>
         </nav>
-        <div>
+
+        <div class="flex items-center gap-3">
           <a
             href="#registro-beta"
-            class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md transition"
+            class="hidden rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-[#c75a71] sm:inline-flex"
           >
             Unirme a la Beta
           </a>
+          <button
+            id="menuBtn"
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-chocolate/15 md:hidden"
+            aria-label="Abrir menú"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 7h16M4 12h16M4 17h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        id="mobileMenu"
+        class="hidden border-t border-chocolate/10 bg-cream px-4 py-4 md:hidden"
+      >
+        <div class="flex flex-col gap-3 text-sm font-medium">
+          <a href="#problema" class="py-1">El problema</a>
+          <a href="#beneficios" class="py-1">Beneficios</a>
+          <a href="#escaner" class="py-1">Escáner IA</a>
+          <a href="#precios" class="py-1">Planes</a>
+          <a
+            href="#registro-beta"
+            class="mt-2 rounded-full bg-accent px-5 py-2.5 text-center font-semibold text-white"
+            >Unirme a la Beta</a
+          >
         </div>
       </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section
-      class="py-16 md:py-24 bg-gradient-to-b from-rose-50/50 to-stone-50"
-    >
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <span
-          class="inline-block bg-rose-100 text-rose-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4"
+    <main>
+      <!-- HERO -->
+      <section id="inicio" class="relative overflow-hidden scroll-mt-24">
+        <div
+          class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-24"
         >
-          SaaS Exclusivo para Reposteras Independientes
-        </span>
-        <h1
-          class="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight mb-6"
+          <div class="lg:col-span-6">
+            <p
+              class="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-white/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent"
+            >
+              <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+              SaaS para reposteras independientes
+            </p>
+            <h1
+              class="font-serif text-4xl leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl"
+            >
+              Tu cocina, un negocio
+              <span class="italic text-accent">rentable</span>
+              y sereno.
+            </h1>
+            <p class="mt-6 max-w-xl text-base leading-relaxed text-chocolate/75 sm:text-lg">
+              BakeIA digitaliza tu libreta manuscrita, calcula el costo real de
+              cada receta y te da un catálogo digital para dejar atrás el miedo
+              a la inflación y el desgaste del “precio por DM”.
+            </p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#registro-beta"
+                class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:bg-[#c75a71]"
+              >
+                Probar la versión Beta
+              </a>
+              <a
+                href="#escaner"
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-chocolate/20 bg-cream px-7 py-3.5 text-sm font-semibold text-chocolate transition hover:border-accent hover:text-accent"
+              >
+                Ver el escáner de IA
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div
+              class="mt-10 flex flex-wrap gap-8 border-t border-chocolate/10 pt-6 text-sm text-chocolate/70"
+            >
+              <div>
+                <p class="font-serif text-2xl text-chocolate">IA</p>
+                <p>Escaneo de recetas</p>
+              </div>
+              <div>
+                <p class="font-serif text-2xl text-chocolate">$0</p>
+                <p>Plan para empezar</p>
+              </div>
+              <div>
+                <p class="font-serif text-2xl text-chocolate">14 días</p>
+                <p>Prueba Profesional</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative lg:col-span-6">
+            <div
+              class="absolute -left-8 -top-8 hidden h-40 w-40 rounded-full bg-accent/15 blur-3xl lg:block"
+            ></div>
+            <figure class="relative overflow-hidden rounded-[2rem] shadow-soft">
+              <img
+                src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1400&q=80"
+                alt="Rolls de canela artesanales recién horneados"
+                class="h-[520px] w-full object-cover"
+              />
+              <figcaption
+                class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-chocolate/80 to-transparent p-6 text-cream"
+              >
+                <div>
+                  <p class="font-serif text-2xl">Croissant</p>
+                  <p class="text-xs uppercase tracking-[0.2em] text-cream/80">
+                    Costo real, margen claro
+                  </p>
+                </div>
+                <p class="font-serif text-xl">$4.80</p>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALERÍA EDITORIAL -->
+      <section class="border-y border-chocolate/10 py-10">
+        <div
+          class="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4 sm:px-6 lg:px-8"
         >
-          Tu cocina, tu negocio rentable. <br /><span class="text-rose-600"
-            >Adiós al miedo a la inflación y al "Precio por DM".</span
-          >
-        </h1>
-        <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto mb-10">
-          Digitaliza tu libreta de recetas en segundos con Inteligencia
-          Artificial, calcula el costo exacto de tus tortas y blinda tus
-          ganancias sin hacer cuentas complejas.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <a
-            href="#registro-beta"
-            class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg transition text-base"
-          >
-            Probar la Versión Beta Gratis
-          </a>
-          <a
-            href="#prototipo"
-            class="bg-white hover:bg-stone-100 text-stone-700 font-semibold px-8 py-3.5 rounded-xl border border-stone-300 transition text-base"
-          >
-            Ver cómo funciona
-          </a>
+          <img
+            src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=700&q=80"
+            alt="Pastelería de hojaldre"
+            class="h-40 w-full rounded-2xl object-cover sm:h-52"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?auto=format&fit=crop&w=700&q=80"
+            alt="Cupcakes artesanales"
+            class="h-40 w-full rounded-2xl object-cover sm:h-52"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80"
+            alt="Torta de chocolate con cobertura brillante"
+            class="h-40 w-full rounded-2xl object-cover sm:h-52"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80"
+            alt="Pan artesanal recién horneado"
+            class="h-40 w-full rounded-2xl object-cover sm:h-52"
+          />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- EL PROBLEMA Y PÚBLICO OBJETIVO -->
-    <section id="problema" class="py-16 bg-white border-t border-stone-200">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <h2 class="text-3xl font-bold text-stone-900 mb-4">
-            El reto diario de la repostería independiente
-          </h2>
-          <p class="text-stone-600">
-            Diseñado específicamente para emprendedores (*home bakers*) que
-            hornean con pasión pero enfrentan serios dolores administrativos.
-          </p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
-            <div class="text-3xl mb-3">📈</div>
-            <h3 class="font-bold text-lg mb-2 text-stone-900">
-              Inflación Silenciosa
-            </h3>
-            <p class="text-sm text-stone-600">
-              Los precios de la harina, mantequilla y huevos cambian cada
-              semana, haciendo que vendas tus postres a pérdida sin darte
-              cuenta.
-            </p>
-          </div>
-          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
-            <div class="text-3xl mb-3">📝</div>
-            <h3 class="font-bold text-lg mb-2 text-stone-900">
-              Libretas Complejas
-            </h3>
-            <p class="text-sm text-stone-600">
-              Odiar las hojas de cálculo y perder horas tratando de calcular
-              gramos y porciones en cuadernos de anotaciones manuales.
-            </p>
-          </div>
-          <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
-            <div class="text-3xl mb-3">💬</div>
-            <h3 class="font-bold text-lg mb-2 text-stone-900">
-              El desgaste del "Precio por DM"
-            </h3>
-            <p class="text-sm text-stone-600">
-              Perder clientes potenciales porque tardas horas en calcular el
-              presupuesto de un pedido especial por mensaje privado.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BENEFICIOS CLAVE -->
-    <section id="beneficios" class="py-16 bg-stone-50">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <h2 class="text-3xl font-bold text-stone-900 mb-4">
-            ¿Por qué elegir DulceGestión?
-          </h2>
-          <p class="text-stone-600">
-            Los pilares que transforman tu cocina artesanal en un negocio formal
-            y seguro.
-          </p>
-        </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
-          >
-            <span class="text-rose-600 font-bold text-xl">01</span>
-            <h4 class="font-bold text-stone-900 mt-2 mb-1">Tranquilidad</h4>
-            <p class="text-xs text-stone-600">
-              Alertas automáticas en tiempo real que te avisan cuándo y cuánto
-              subir a tus precios al subir los insumos.
-            </p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
-          >
-            <span class="text-rose-600 font-bold text-xl">02</span>
-            <h4 class="font-bold text-stone-900 mt-2 mb-1">Simplicidad</h4>
-            <p class="text-xs text-stone-600">
-              Carga tus recetas tomando una simple foto a tu libreta manuscrita,
-              sin tipear ingrediente por ingrediente.
-            </p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
-          >
-            <span class="text-rose-600 font-bold text-xl">03</span>
-            <h4 class="font-bold text-stone-900 mt-2 mb-1">Ahorro de Tiempo</h4>
-            <p class="text-xs text-stone-600">
-              Un catálogo web ("Link en Bio") donde tus clientes cotizan solos y
-              envían el pedido estructurado a tu WhatsApp.
-            </p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-xl shadow-sm border border-stone-200"
-          >
-            <span class="text-rose-600 font-bold text-xl">04</span>
-            <h4 class="font-bold text-stone-900 mt-2 mb-1">Valor Económico</h4>
-            <p class="text-xs text-stone-600">
-              Protege tu margen de ganancia real para que cada venta cubra tu
-              esfuerzo, servicios e ingredientes.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRESENTACIÓN DEL PROTOTIPO -->
-    <section id="prototipo" class="py-16 bg-white border-t border-stone-200">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <h2 class="text-3xl font-bold text-stone-900 mb-4">
-            Así funciona nuestro Prototipo
-          </h2>
-          <p class="text-stone-600">
-            Un flujo pensado para el uso diario desde tu celular.
-          </p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8 text-center">
-          <div class="p-4">
-            <div
-              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
+      <!-- PROBLEMA -->
+      <section id="problema" class="scroll-mt-24 py-20 sm:py-24">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto mb-14 max-w-2xl text-center">
+            <p
+              class="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent"
             >
-              📸
-            </div>
-            <h3 class="font-bold mb-2">1. Escanea tu Libreta</h3>
-            <p class="text-xs text-stone-600">
-              Toma una foto a tu receta escrita a mano. La IA de Google Gemini
-              extrae automáticamente los ingredientes.
+              El oficio, sin el caos
+            </p>
+            <h2 class="font-serif text-3xl sm:text-4xl">
+              El reto diario de la repostería independiente
+            </h2>
+            <p class="mt-4 text-chocolate/70">
+              Pensado para home bakers que hornean con intención, pero pierden
+              margen, tiempo y clientes en lo administrativo.
             </p>
           </div>
-          <div class="p-4">
-            <div
-              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
-            >
-              ⚖️
-            </div>
-            <h3 class="font-bold mb-2">2. Costeo en Cadena</h3>
-            <p class="text-xs text-stone-600">
-              Modifica el precio de la harina una vez y el sistema actualizará
-              los costos de todas tus tortas afectadas.
-            </p>
-          </div>
-          <div class="p-4">
-            <div
-              class="bg-rose-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-4"
-            >
-              📱
-            </div>
-            <h3 class="font-bold mb-2">3. Vende por WhatsApp</h3>
-            <p class="text-xs text-stone-600">
-              Comparte tu catálogo digital interactivo y recibe pedidos claros
-              con el margen de ganancia asegurado.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- PLANES Y PRECIOS -->
-    <section id="precios" class="py-16 bg-stone-50 border-t border-stone-200">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <h2 class="text-3xl font-bold text-stone-900 mb-4">
-            Planes accesibles para comenzar
-          </h2>
-          <p class="text-stone-600">
-            Empieza gratis y escoge el nivel ideal para profesionalizar tu
-            repostería.
-          </p>
-        </div>
-        <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          <!-- Plan Emprendedor -->
-          <div
-            class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between"
-          >
-            <div>
-              <h3 class="font-bold text-xl mb-2 text-stone-900">
-                Plan Emprendedor
-              </h3>
-              <p class="text-stone-500 text-sm mb-6">
-                Ideal para iniciar en el mundo digital.
+          <div class="grid gap-6 md:grid-cols-3">
+            <article
+              class="rounded-3xl border border-chocolate/10 bg-cream p-8 shadow-soft"
+            >
+              <span
+                class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-chocolate/15"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 17l6-6 4 4 8-8"
+                  />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 7h7v7" />
+                </svg>
+              </span>
+              <h3 class="font-serif text-2xl">Inflación silenciosa</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Harina, mantequilla y huevos cambian de precio cada semana. Sin
+                un costeo vivo, es fácil vender a pérdida y no notarlo.
               </p>
-              <div class="text-3xl font-extrabold mb-6">
+            </article>
+            <article
+              class="rounded-3xl border border-chocolate/10 bg-cream p-8 shadow-soft"
+            >
+              <span
+                class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-chocolate/15"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
+                  />
+                </svg>
+              </span>
+              <h3 class="font-serif text-2xl">Libretas complejas</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Horas frente a planillas o cuadernos manuscritos, convirtiendo
+                gramos y porciones a mano, receta por receta.
+              </p>
+            </article>
+            <article
+              class="rounded-3xl border border-chocolate/10 bg-cream p-8 shadow-soft"
+            >
+              <span
+                class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-chocolate/15"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 10h8M8 14h5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+              <h3 class="font-serif text-2xl">El desgaste del DM</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Pedidos especiales que se enfrían porque tardas demasiado en
+                armar un presupuesto por mensaje privado.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- BENEFICIOS -->
+      <section id="beneficios" class="scroll-mt-24 border-t border-chocolate/10 py-20 sm:py-24">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div class="grid items-end gap-8 lg:grid-cols-12">
+            <div class="lg:col-span-5">
+              <p
+                class="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent"
+              >
+                Por qué BakeIA
+              </p>
+              <h2 class="font-serif text-3xl sm:text-4xl">
+                De oficio artesanal a negocio formal, sin perder el alma.
+              </h2>
+            </div>
+            <p class="lg:col-span-6 lg:col-start-7 text-chocolate/70">
+              Cuatro pilares para que cada venta cubra ingredientes, servicios y
+              tu tiempo — con la estética de un atelier, y la claridad de un
+              software profesional.
+            </p>
+          </div>
+
+          <div class="mt-14 grid gap-px overflow-hidden rounded-3xl border border-chocolate/10 bg-chocolate/10 md:grid-cols-2">
+            <article class="bg-cream p-8 sm:p-10">
+              <p class="font-serif text-3xl text-accent">01</p>
+              <h3 class="mt-3 font-serif text-2xl">Tranquilidad</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Alertas cuando suben los insumos. Sabes cuánto y cuándo ajustar
+                el precio, antes de que el margen se evapore.
+              </p>
+            </article>
+            <article class="bg-cream p-8 sm:p-10">
+              <p class="font-serif text-3xl text-accent">02</p>
+              <h3 class="mt-3 font-serif text-2xl">Simplicidad</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Una foto a tu libreta basta. La IA extrae ingredientes, cantidades
+                y deja la receta lista para costear.
+              </p>
+            </article>
+            <article class="bg-cream p-8 sm:p-10">
+              <p class="font-serif text-3xl text-accent">03</p>
+              <h3 class="mt-3 font-serif text-2xl">Ahorro de tiempo</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Catálogo web tipo “link in bio”: tus clientes cotizan solos y te
+                envían el pedido estructurado a WhatsApp.
+              </p>
+            </article>
+            <article class="bg-cream p-8 sm:p-10">
+              <p class="font-serif text-3xl text-accent">04</p>
+              <h3 class="mt-3 font-serif text-2xl">Valor económico</h3>
+              <p class="mt-3 text-sm leading-relaxed text-chocolate/70">
+                Protege el margen real. Cada torta, cookie o pedido especial
+                cubre esfuerzo, servicios e ingredientes.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ESCÁNER IA -->
+      <section id="escaner" class="scroll-mt-24 border-t border-chocolate/10 py-20 sm:py-24">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto mb-12 max-w-2xl text-center">
+            <p
+              class="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent"
+            >
+              Prototipo visual
+            </p>
+            <h2 class="font-serif text-3xl sm:text-4xl">
+              De la libreta manuscrita al costo exacto
+            </h2>
+            <p class="mt-4 text-chocolate/70">
+              El Escáner de Recetas por IA de BakeIA lee tu cuaderno, extrae
+              ingredientes y arma el costeo. Sin teclear gramo por gramo.
+            </p>
+          </div>
+
+          <div
+            class="overflow-hidden rounded-[2rem] border border-chocolate/10 bg-cream shadow-soft"
+          >
+            <div class="grid lg:grid-cols-2">
+              <!-- Libreta -->
+              <div class="relative min-h-[420px] overflow-hidden bg-chocolate">
+                <img
+                  src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=1200&q=80"
+                  alt="Libreta de recetas y mesa de pastelería"
+                  class="absolute inset-0 h-full w-full object-cover opacity-55"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-chocolate/70 via-chocolate/40 to-chocolate/80"
+                ></div>
+                <div class="relative z-10 flex h-full flex-col p-6 sm:p-8">
+                  <div class="mb-4 flex items-center justify-between text-cream/80">
+                    <p class="text-[11px] uppercase tracking-[0.2em]">
+                      Libreta original
+                    </p>
+                    <span
+                      class="inline-flex items-center gap-1.5 rounded-full border border-cream/20 px-3 py-1 text-[11px]"
+                    >
+                      <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+                      Escaneando
+                    </span>
+                  </div>
+                  <div
+                    class="relative flex-1 overflow-hidden rounded-2xl border border-cream/15 bg-cream paper-bg p-6 text-chocolate shadow-soft"
+                  >
+                    <p class="font-serif text-2xl italic">Torta de vainilla</p>
+                    <p class="mt-1 text-xs uppercase tracking-[0.16em] text-chocolate/50">
+                      Receta de la abuela · 12 porciones
+                    </p>
+                    <ul class="mt-6 space-y-2 text-sm leading-7">
+                      <li>250 g harina de trigo</li>
+                      <li>200 g azúcar</li>
+                      <li>3 huevos</li>
+                      <li>120 g mantequilla</li>
+                      <li>180 ml leche</li>
+                      <li>1 cdita. extracto de vainilla</li>
+                    </ul>
+                    <div
+                      class="scan-line pointer-events-none absolute left-0 right-0 h-12 bg-gradient-to-b from-accent/0 via-accent/35 to-accent/0"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Extracción IA -->
+              <div class="flex flex-col bg-cream p-6 sm:p-8">
+                <div class="mb-5 flex items-center justify-between">
+                  <div>
+                    <p class="text-[11px] uppercase tracking-[0.2em] text-accent">
+                      BakeIA · Costeo automático
+                    </p>
+                    <h3 class="mt-1 font-serif text-2xl">Ingredientes extraídos</h3>
+                  </div>
+                  <button
+                    id="rescanBtn"
+                    type="button"
+                    class="rounded-full border border-chocolate/15 px-3 py-1.5 text-xs font-semibold transition hover:border-accent hover:text-accent"
+                  >
+                    Volver a escanear
+                  </button>
+                </div>
+
+                <div id="extractedList" class="space-y-2">
+                  <div
+                    class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm"
+                    style="animation-delay: 0.05s"
+                  >
+                    <span>Harina de trigo</span>
+                    <span class="text-chocolate/50">250 g · $0.42</span>
+                  </div>
+                  <div
+                    class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm"
+                    style="animation-delay: 0.15s"
+                  >
+                    <span>Azúcar</span>
+                    <span class="text-chocolate/50">200 g · $0.28</span>
+                  </div>
+                  <div
+                    class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm"
+                    style="animation-delay: 0.25s"
+                  >
+                    <span>Huevos</span>
+                    <span class="text-chocolate/50">3 ud. · $0.54</span>
+                  </div>
+                  <div
+                    class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm"
+                    style="animation-delay: 0.35s"
+                  >
+                    <span>Mantequilla</span>
+                    <span class="text-chocolate/50">120 g · $0.91</span>
+                  </div>
+                  <div
+                    class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm"
+                    style="animation-delay: 0.45s"
+                  >
+                    <span>Leche + vainilla</span>
+                    <span class="text-chocolate/50">— · $0.33</span>
+                  </div>
+                </div>
+
+                <div
+                  class="mt-6 flex items-end justify-between rounded-2xl border border-accent/30 bg-accent/10 px-5 py-4"
+                >
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-accent">
+                      Costo de receta
+                    </p>
+                    <p class="font-serif text-3xl">$2.48</p>
+                  </div>
+                  <div class="text-right text-sm">
+                    <p class="text-chocolate/60">Precio sugerido</p>
+                    <p class="font-semibold">$6.20 <span class="font-normal text-chocolate/50">· 60% margen</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pasos -->
+          <div class="mt-14 grid gap-8 md:grid-cols-3">
+            <div class="text-center md:text-left">
+              <span
+                class="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-chocolate/15 md:mx-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h4l1-2h8l1 2h4v12H3V7z" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+              </span>
+              <h3 class="font-serif text-xl">1. Escanea tu libreta</h3>
+              <p class="mt-2 text-sm text-chocolate/70">
+                Una foto a la receta escrita a mano. BakeIA identifica
+                ingredientes y cantidades.
+              </p>
+            </div>
+            <div class="text-center md:text-left">
+              <span
+                class="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-chocolate/15 md:mx-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M8 8h3M8 12h3M16 7l3 5-3 5" />
+                </svg>
+              </span>
+              <h3 class="font-serif text-xl">2. Costeo en cadena</h3>
+              <p class="mt-2 text-sm text-chocolate/70">
+                Cambia el precio de la harina una vez y se actualizan todas las
+                recetas afectadas.
+              </p>
+            </div>
+            <div class="text-center md:text-left">
+              <span
+                class="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-chocolate/15 md:mx-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8v10H8zM7 7h10l-1 3H8L7 7z" />
+                </svg>
+              </span>
+              <h3 class="font-serif text-xl">3. Vende por WhatsApp</h3>
+              <p class="mt-2 text-sm text-chocolate/70">
+                Comparte tu catálogo digital y recibe pedidos claros, con el
+                margen ya asegurado.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BANNER EDITORIAL -->
+      <section class="px-4 pb-8 sm:px-6 lg:px-8">
+        <div
+          class="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem]"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1800&q=80"
+            alt="Manos trabajando masa en una cocina artesanal"
+            class="h-72 w-full object-cover sm:h-96"
+          />
+          <div
+            class="absolute inset-0 flex items-end bg-gradient-to-t from-chocolate/80 via-chocolate/25 to-transparent p-8 sm:p-12"
+          >
+            <blockquote class="max-w-xl text-cream">
+              <p class="font-serif text-3xl italic leading-snug sm:text-4xl">
+                “Hornea con cuidado. Cobra con certeza.”
+              </p>
+              <p class="mt-3 text-sm uppercase tracking-[0.2em] text-cream/70">
+                BakeIA · para home bakers
+              </p>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRECIOS -->
+      <section id="precios" class="scroll-mt-24 py-20 sm:py-24">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto mb-14 max-w-2xl text-center">
+            <p
+              class="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent"
+            >
+              Planes
+            </p>
+            <h2 class="font-serif text-3xl sm:text-4xl">
+              Accesible para comenzar. Serio para crecer.
+            </h2>
+            <p class="mt-4 text-chocolate/70">
+              Empieza gratis y elige el nivel para profesionalizar tu
+              repostería.
+            </p>
+          </div>
+
+          <div class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+            <article
+              class="flex flex-col rounded-[2rem] border border-chocolate/10 bg-cream p-8 sm:p-10"
+            >
+              <h3 class="font-serif text-2xl">Plan Emprendedor</h3>
+              <p class="mt-2 text-sm text-chocolate/60">
+                Ideal para dar el primer paso digital.
+              </p>
+              <p class="mt-6 font-serif text-5xl">
                 $0
-                <span class="text-sm font-normal text-stone-500"
+                <span class="text-base font-sans font-normal text-chocolate/50"
                   >/ siempre</span
                 >
-              </div>
-              <ul class="space-y-3 text-sm text-stone-600 mb-8">
-                <li>✓ Catálogo web básico (hasta 3 productos)</li>
-                <li>✓ Enlace directo a WhatsApp</li>
-                <li>✓ Ingreso manual de recetas</li>
+              </p>
+              <ul class="mt-8 space-y-3 text-sm text-chocolate/80">
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Catálogo web básico (hasta 3 productos)
+                </li>
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Enlace directo a WhatsApp
+                </li>
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Ingreso manual de recetas
+                </li>
               </ul>
-            </div>
-            <a
-              href="#registro-beta"
-              class="block text-center bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold py-3 rounded-xl transition"
-              >Empezar Gratis</a
+              <a
+                href="#registro-beta"
+                class="mt-10 block rounded-full border border-chocolate/20 py-3 text-center text-sm font-semibold transition hover:border-accent hover:text-accent"
+                >Empezar gratis</a
+              >
+            </article>
+
+            <article
+              class="relative flex flex-col rounded-[2rem] border-2 border-accent bg-cream p-8 shadow-soft sm:p-10"
             >
-          </div>
-          <!-- Plan Profesional -->
-          <div
-            class="bg-white p-8 rounded-2xl border-2 border-rose-600 shadow-md flex flex-col justify-between relative"
-          >
-            <span
-              class="absolute -top-3 right-8 bg-rose-600 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase"
-              >Más Popular</span
-            >
-            <div>
-              <h3 class="font-bold text-xl mb-2 text-stone-900">
-                Plan Profesional
-              </h3>
-              <p class="text-stone-500 text-sm mb-6">
+              <span
+                class="absolute -top-3 right-8 rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white"
+                >Más popular</span
+              >
+              <h3 class="font-serif text-2xl">Plan Profesional</h3>
+              <p class="mt-2 text-sm text-chocolate/60">
                 Para reposteras que quieren blindar sus ganancias.
               </p>
-              <div class="text-3xl font-extrabold mb-6">
+              <p class="mt-6 font-serif text-5xl">
                 $7.99
-                <span class="text-sm font-normal text-stone-500">/ mes</span>
-              </div>
-              <ul class="space-y-3 text-sm text-stone-600 mb-8">
-                <li>✓ <strong>Escáner de recetas por IA</strong></li>
-                <li>✓ Recetas y catálogos ilimitados</li>
-                <li>✓ Alertas de inflación en tiempo real</li>
-                <li>✓ Generador de presupuestos en PDF</li>
+                <span class="text-base font-sans font-normal text-chocolate/50"
+                  >/ mes</span
+                >
+              </p>
+              <ul class="mt-8 space-y-3 text-sm text-chocolate/80">
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <strong>Escáner de recetas por IA</strong>
+                </li>
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Recetas y catálogos ilimitados
+                </li>
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Alertas de inflación en tiempo real
+                </li>
+                <li class="flex gap-3">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Generador de presupuestos en PDF
+                </li>
               </ul>
+              <a
+                href="#registro-beta"
+                class="mt-10 block rounded-full bg-accent py-3 text-center text-sm font-semibold text-white transition hover:bg-[#c75a71]"
+                >Obtener prueba de 14 días</a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- REGISTRO BETA -->
+      <section
+        id="registro-beta"
+        class="scroll-mt-24 border-t border-chocolate/10 py-20 sm:py-24"
+      >
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div class="grid items-start gap-12 lg:grid-cols-12">
+            <div class="lg:col-span-5">
+              <p
+                class="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent"
+              >
+                Lista de espera
+              </p>
+              <h2 class="font-serif text-3xl sm:text-4xl">
+                Únete a la Beta de BakeIA
+              </h2>
+              <p class="mt-4 text-chocolate/70">
+                Completa tus datos para acceso preferencial y 1 mes gratuito del
+                Plan Profesional.
+              </p>
+              <img
+                src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80"
+                alt="Pastel de fresas sobre fondo claro"
+                class="mt-8 hidden h-72 w-full rounded-[2rem] object-cover lg:block"
+              />
             </div>
-            <a
-              href="#registro-beta"
-              class="block text-center bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl transition"
-              >Obtener Prueba de 14 Días</a
+
+            <form
+              id="betaForm"
+              class="space-y-5 rounded-[2rem] border border-chocolate/10 bg-cream p-6 shadow-soft sm:p-8 lg:col-span-7"
             >
+              <div>
+                <label for="nombre" class="mb-1.5 block text-sm font-medium"
+                  >Nombre completo *</label
+                >
+                <input
+                  type="text"
+                  id="nombre"
+                  required
+                  class="w-full rounded-2xl border border-chocolate/15 bg-white/60 px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="Ej. María Gómez"
+                />
+              </div>
+
+              <div>
+                <label for="correo" class="mb-1.5 block text-sm font-medium"
+                  >Correo electrónico *</label
+                >
+                <input
+                  type="email"
+                  id="correo"
+                  required
+                  class="w-full rounded-2xl border border-chocolate/15 bg-white/60 px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="tucorreo@email.com"
+                />
+              </div>
+
+              <div>
+                <label for="perfil_o_empresa" class="mb-1.5 block text-sm font-medium"
+                  >Perfil o nombre de tu emprendimiento *</label
+                >
+                <input
+                  type="text"
+                  id="perfil_o_empresa"
+                  required
+                  class="w-full rounded-2xl border border-chocolate/15 bg-white/60 px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="Ej. @DulceTentacionTarija"
+                />
+              </div>
+
+              <div>
+                <label for="necesidad" class="mb-1.5 block text-sm font-medium"
+                  >¿Cuál es tu mayor reto al poner precios? *</label
+                >
+                <select
+                  id="necesidad"
+                  required
+                  class="w-full rounded-2xl border border-chocolate/15 bg-white/60 px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                >
+                  <option value="">Selecciona una opción...</option>
+                  <option value="Perdida por inflacion">
+                    Perder dinero cuando suben los insumos
+                  </option>
+                  <option value="Complejidad de planillas">
+                    Me aburre o confunde usar Excel
+                  </option>
+                  <option value="Desgaste por Precio por DM">
+                    Pierdo clientes respondiendo precios por mensaje
+                  </option>
+                  <option value="Otro">Otro dolor financiero</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="interes" class="mb-1.5 block text-sm font-medium"
+                  >Plan de interés *</label
+                >
+                <select
+                  id="interes"
+                  required
+                  class="w-full rounded-2xl border border-chocolate/15 bg-white/60 px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                >
+                  <option value="Plan Profesional (Pro)">
+                    Plan Profesional (Con Escáner IA y Alertas)
+                  </option>
+                  <option value="Plan Emprendedor (Gratis)">
+                    Plan Emprendedor (Gratis / Catálogo Básico)
+                  </option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                id="submitBtn"
+                class="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white shadow-soft transition hover:bg-[#c75a71] disabled:opacity-70"
+              >
+                Inscribirme a la Beta
+              </button>
+
+              <div
+                id="formMessage"
+                class="hidden rounded-2xl p-4 text-center text-sm"
+              ></div>
+            </form>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <!-- FORMULARIO DE REGISTRO A LA BETA (CONECTADO A SUPABASE) -->
-    <section
-      id="registro-beta"
-      class="py-16 bg-white border-t border-stone-200"
-    >
-      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
-          <h2 class="text-3xl font-bold text-stone-900 mb-2">
-            Únete a la Lista de Espera Beta
-          </h2>
-          <p class="text-stone-600 text-sm">
-            Completa tus datos para asegurar acceso preferencial y 1 mes
-            gratuito del Plan Pro.
-          </p>
+    <footer class="bg-chocolate text-cream">
+      <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+          <div>
+            <p class="font-serif text-5xl tracking-tight sm:text-6xl">BakeIA</p>
+            <p class="mt-3 max-w-sm text-sm text-cream/70">
+              Costos, escáner de recetas por IA y catálogo digital para
+              reposteras y home bakers.
+            </p>
+          </div>
+          <nav class="flex flex-wrap gap-6 text-sm text-cream/70">
+            <a href="#problema" class="hover:text-cream">El problema</a>
+            <a href="#beneficios" class="hover:text-cream">Beneficios</a>
+            <a href="#escaner" class="hover:text-cream">Escáner IA</a>
+            <a href="#precios" class="hover:text-cream">Planes</a>
+            <a href="#registro-beta" class="hover:text-cream">Beta</a>
+          </nav>
         </div>
-
-        <form
-          id="betaForm"
-          class="bg-stone-50 p-8 rounded-2xl border border-stone-200 shadow-sm space-y-5"
-        >
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1"
-              >Nombre Completo *</label
-            >
-            <input
-              type="text"
-              id="nombre"
-              required
-              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
-              placeholder="Ej. María Gómez"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1"
-              >Correo Electrónico *</label
-            >
-            <input
-              type="email"
-              id="correo"
-              required
-              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
-              placeholder="tucorreo@email.com"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1"
-              >Perfil o Nombre de tu Emprendimiento *</label
-            >
-            <input
-              type="text"
-              id="perfil_o_empresa"
-              required
-              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm"
-              placeholder="Ej. @DulceTentacionTarija"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1"
-              >¿Cuál es tu mayor reto o necesidad al poner precios? *</label
-            >
-            <select
-              id="necesidad"
-              required
-              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm bg-white"
-            >
-              <option value="">Selecciona una opción...</option>
-              <option value="Perdida por inflacion">
-                Perder dinero cuando suben los insumos
-              </option>
-              <option value="Complejidad de planillas">
-                Me aburre o confunde usar Excel
-              </option>
-              <option value="Desgaste por Precio por DM">
-                Pierdo clientes respondiendo precios por mensaje
-              </option>
-              <option value="Otro">Otro dolor financiero</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1"
-              >Plan de Interés *</label
-            >
-            <select
-              id="interes"
-              required
-              class="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:ring-2 focus:ring-rose-500 focus:outline-none text-sm bg-white"
-            >
-              <option value="Plan Profesional (Pro)">
-                Plan Profesional (Con Escáner IA y Alertas)
-              </option>
-              <option value="Plan Emprendedor (Gratis)">
-                Plan Emprendedor (Gratis / Catálogo Básico)
-              </option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            id="submitBtn"
-            class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl shadow-md transition text-sm"
-          >
-            Inscribirme a la Beta
-          </button>
-
-          <!-- Mensajes de Estado -->
-          <div
-            id="formMessage"
-            class="hidden p-4 rounded-lg text-sm text-center"
-          ></div>
-        </form>
+        <p class="mt-12 border-t border-cream/15 pt-6 text-xs text-cream/50">
+          &copy; 2026 BakeIA. Proyecto académico de validación SaaS. Todos los
+          derechos reservados.
+        </p>
       </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
-      <p>
-        &copy; 2026 DulceGestión. Proyecto Académico de Validación SaaS. Todos
-        los derechos reservados.
-      </p>
     </footer>
 
-    <!-- SCRIPT DE INTEGRACIÓN CON SUPABASE Y VALIDACIÓN -->
     <script>
-      // Configuración de Supabase (Credenciales públicas seguras con clave Anónima)
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+      mobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+      });
+
+      const extractedMarkup = `
+        <div class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm" style="animation-delay: 0.05s">
+          <span>Harina de trigo</span>
+          <span class="text-chocolate/50">250 g · $0.42</span>
+        </div>
+        <div class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm" style="animation-delay: 0.15s">
+          <span>Azúcar</span>
+          <span class="text-chocolate/50">200 g · $0.28</span>
+        </div>
+        <div class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm" style="animation-delay: 0.25s">
+          <span>Huevos</span>
+          <span class="text-chocolate/50">3 ud. · $0.54</span>
+        </div>
+        <div class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm" style="animation-delay: 0.35s">
+          <span>Mantequilla</span>
+          <span class="text-chocolate/50">120 g · $0.91</span>
+        </div>
+        <div class="ingredient-row flex items-center justify-between rounded-2xl border border-chocolate/10 bg-white/50 px-4 py-3 text-sm" style="animation-delay: 0.45s">
+          <span>Leche + vainilla</span>
+          <span class="text-chocolate/50">— · $0.33</span>
+        </div>`;
+
+      document.getElementById("rescanBtn").addEventListener("click", () => {
+        const list = document.getElementById("extractedList");
+        list.innerHTML = extractedMarkup;
+      });
+
       const SUPABASE_URL = "https://vdaudlooggsqihmydbud.supabase.co";
       const SUPABASE_ANON_KEY =
         "sb_publishable_JZyUb9uAZi6dB9rhr463AQ_DhWD4tFs";
 
-      // Inicializar cliente de Supabase
       const supabaseClient = supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY,
@@ -474,7 +996,6 @@
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Recoger datos del formulario
         const nombre = document.getElementById("nombre").value.trim();
         const correo = document.getElementById("correo").value.trim();
         const perfil_o_empresa = document
@@ -483,7 +1004,6 @@
         const necesidad = document.getElementById("necesidad").value;
         const interes = document.getElementById("interes").value;
 
-        // Validación simple en JavaScript
         if (!nombre || !correo || !perfil_o_empresa || !necesidad || !interes) {
           showFeedback(
             "Por favor completa todos los campos requeridos.",
@@ -496,7 +1016,6 @@
         submitBtn.textContent = "Enviando registro...";
 
         try {
-          // Inserción en la tabla de Supabase (FN0)
           const { data, error } = await supabaseClient
             .from("beta_registrations")
             .insert([{ nombre, correo, perfil_o_empresa, necesidad, interes }]);
@@ -504,7 +1023,7 @@
           if (error) throw error;
 
           showFeedback(
-            "¡Registro exitoso! Te hemos agregado a la lista beta prioritaria. Nos pondremos en contacto.",
+            "Registro exitoso. Te hemos agregado a la lista beta prioritaria. Nos pondremos en contacto.",
             "success",
           );
           form.reset();
@@ -525,9 +1044,9 @@
         formMessage.classList.remove(
           "hidden",
           "bg-emerald-100",
-          "text-emerald-700",
+          "text-emerald-800",
           "bg-rose-100",
-          "text-rose-700",
+          "text-rose-800",
         );
         if (type === "success") {
           formMessage.classList.add("bg-emerald-100", "text-emerald-800");
