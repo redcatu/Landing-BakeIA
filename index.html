@@ -8,14 +8,14 @@
       name="description"
       content="BakeIA digitaliza tu libreta de recetas con inteligencia artificial, calcula el costo exacto de cada postre y te da un catálogo digital para vender sin perder margen."
     />
-    <meta name="theme-color" content="#E88D93" />
+    <meta name="theme-color" content="#D9A3A9" />
     <meta property="og:title" content="BakeIA — Gestión de costos para home bakers" />
     <meta
       property="og:description"
       content="Escanea recetas a mano, costea en segundos y vende con un catálogo digital. Hecho para reposteras independientes."
     />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23E88D93'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia' font-size='16' fill='%23FFFFFF'%3EB%3C/text%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23D9A3A9'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia' font-size='16' fill='%23FFFFFF'%3EB%3C/text%3E%3C/svg%3E" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -119,13 +119,13 @@
   </head>
   <body class="bg-cream text-chocolate antialiased">
     <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-chocolate shadow-card">
+    <header class="sticky top-0 z-50 bg-[#F3E8DC] shadow-card">
       <div
         class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8"
       >
-        <a href="#inicio" class="flex items-center gap-3 text-white">
+        <a href="#inicio" class="flex items-center gap-3 text-chocolate">
           <span
-            class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white"
+            class="flex h-9 w-9 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c1.8 2.4 3 5.1 3 7.8A3 3 0 1 1 9 10.8C9 8.1 10.2 5.4 12 3Z" />
@@ -135,24 +135,24 @@
           <span class="font-serif text-2xl tracking-tight">BakeIA</span>
         </a>
 
-        <nav class="hidden items-center gap-8 text-sm font-medium text-white/90 md:flex">
-          <a href="#problema" class="transition hover:text-white">El problema</a>
-          <a href="#beneficios" class="transition hover:text-white">Beneficios</a>
-          <a href="#escaner" class="transition hover:text-white">Escáner IA</a>
-          <a href="#precios" class="transition hover:text-white">Planes</a>
+        <nav class="hidden items-center gap-8 text-sm font-medium text-chocolate/80 md:flex">
+          <a href="#problema" class="transition hover:text-chocolate">El problema</a>
+          <a href="#beneficios" class="transition hover:text-chocolate">Beneficios</a>
+          <a href="#escaner" class="transition hover:text-chocolate">Escáner IA</a>
+          <a href="#precios" class="transition hover:text-chocolate">Planes</a>
         </nav>
 
         <div class="flex items-center gap-3">
           <a
             href="#registro-beta"
-            class="hidden rounded-full bg-chocolate px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-[#3a2321] sm:inline-flex"
+            class="hidden rounded-full bg-[#68413F] px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-[#563B3A] sm:inline-flex"
           >
             Unirme a la Beta
           </a>
           <button
             id="menuBtn"
             type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white md:hidden"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate md:hidden"
             aria-label="Abrir menú"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -161,13 +161,13 @@
           </button>
         </div>
       </div>
-      <div id="mobileMenu" class="hidden border-t border-white/15 bg-chocolate px-4 py-4 md:hidden">
-        <div class="flex flex-col gap-3 text-sm font-medium text-white">
+      <div id="mobileMenu" class="hidden border-t border-[#D8C6B5] bg-[#F3E8DC] px-4 py-4 md:hidden">
+        <div class="flex flex-col gap-3 text-sm font-medium text-chocolate">
           <a href="#problema" class="py-1">El problema</a>
           <a href="#beneficios" class="py-1">Beneficios</a>
           <a href="#escaner" class="py-1">Escáner IA</a>
           <a href="#precios" class="py-1">Planes</a>
-          <a href="#registro-beta" class="mt-2 rounded-full bg-accent px-5 py-2.5 text-center font-semibold text-white">Unirme a la Beta</a>
+          <a href="#registro-beta" class="mt-2 rounded-full bg-[#68413F] px-5 py-2.5 text-center font-semibold text-white">Unirme a la Beta</a>
         </div>
       </div>
     </header>
@@ -177,15 +177,23 @@
       <section id="inicio" class="relative overflow-hidden scroll-mt-24 bg-cream">
         <div class="pointer-events-none absolute -right-16 top-10 h-64 w-64 rounded-full bg-[#E8C4C8]/30 blur-3xl"></div>
         <div class="pointer-events-none absolute -left-10 bottom-0 h-56 w-56 rounded-full bg-[#D96B82]/10 blur-3xl"></div>
-        <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-24">
-          <div class="lg:col-span-6">
+        <div class="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:py-24">
+          <div class="absolute inset-0 -z-10 lg:hidden">
+            <img
+              src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1400&q=80"
+              alt="Croissants artesanales con harina"
+              class="h-full w-full object-cover opacity-35"
+            />
+            <div class="absolute inset-0 bg-[#F3E8DC]/75"></div>
+          </div>
+          <div class="relative z-10 lg:col-span-5">
             <p class="mb-5 inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white shadow-card">
               <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
               SaaS para reposteras independientes
             </p>
-            <h1 class="font-serif text-4xl leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 class="font-serif text-4xl leading-[1.08] tracking-tight sm:text-5xl lg:text-[4.2rem] lg:leading-[0.96]">
               Tu cocina, un negocio
-              <span class="font-script text-5xl text-accent sm:text-6xl lg:text-7xl">rentable</span>
+              <span class="font-script text-5xl text-accent sm:text-6xl lg:text-[5.2rem]">rentable</span>
               y sereno.
             </h1>
             <p class="mt-6 max-w-xl text-base leading-relaxed text-chocolate/75 sm:text-lg">
@@ -220,35 +228,101 @@
             </div>
           </div>
 
-          <div class="relative lg:col-span-6">
-            <figure class="relative overflow-hidden rounded-[2rem] shadow-lg ring-4 ring-white">
+          <div class="relative hidden lg:col-span-7 lg:block">
+            <div class="relative overflow-hidden rounded-[2rem] shadow-lg ring-4 ring-white lg:h-[620px]">
+              <div class="absolute inset-0 bg-[#2b1d1b] lg:hidden"></div>
               <img
                 src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1400&q=80"
                 alt="Croissants artesanales con harina"
-                class="h-[520px] w-full object-cover"
+                class="h-[420px] w-full object-cover opacity-90 lg:h-full lg:object-cover"
               />
+              <div class="absolute inset-0 bg-gradient-to-br from-[#0f0908]/55 via-[#0f0908]/20 to-[#0f0908]/60 lg:hidden"></div>
               <figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-chocolate/85 via-chocolate/35 to-transparent p-6 text-white">
                 <div>
                   <p class="font-serif text-2xl">Croissant</p>
                   <p class="text-xs uppercase tracking-[0.2em] text-white/80">Costo real, margen claro</p>
                 </div>
-                <p class="rounded-full bg-accent px-4 py-1.5 font-serif text-xl shadow-card">Bs. 32</p>
+                <p class="rounded-full bg-accent px-4 py-1.5 font-serif text-xl shadow-card">Bs. 6</p>
               </figcaption>
-            </figure>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- GALERÍA -->
-      <section class="bg-cream py-12">
+      <section class="bg-cream py-12 sm:py-16">
         <div class="mx-auto mb-8 flex justify-center">
           <span class="rounded-full bg-accent px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">En tu obrador</span>
         </div>
-        <div class="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 sm:grid-cols-4 sm:px-6 lg:px-8">
-          <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=700&q=80" alt="Pastelería de hojaldre" class="h-40 w-full rounded-3xl object-cover shadow-lg sm:h-52" />
-          <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=700&q=80" alt="Cupcake con frosting rosa" class="h-40 w-full rounded-3xl object-cover shadow-lg sm:h-52" />
-          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80" alt="Torta de chocolate" class="h-40 w-full rounded-3xl object-cover shadow-lg sm:h-52" />
-          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80" alt="Pan artesanal" class="h-40 w-full rounded-3xl object-cover shadow-lg sm:h-52" />
+
+        <div class="mx-auto grid max-w-6xl gap-5 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+          <article class="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#E2D4C3] bg-white shadow-md">
+            <div class="h-60 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=900&q=80" alt="Pie de limón" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col justify-between p-4 sm:p-5">
+              <div class="space-y-2">
+                <p class="text-[10px] uppercase tracking-[0.18em] text-[#7C5C59]">Especial del día</p>
+                <h3 class="font-serif text-[1.7rem] leading-[1.02] text-chocolate">Pie de Limón</h3>
+                <p class="text-sm leading-relaxed text-chocolate/70">Masa crujiente, relleno cítrico y merengue suave con toque fresco y brillante.</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-[0.16em] text-chocolate/60">Por unidad</p>
+                <p class="mt-1 font-serif text-3xl leading-none text-chocolate">Bs. 17</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#E2D4C3] bg-white shadow-md">
+            <div class="h-60 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=900&q=80" alt="Cupcakes de vainilla" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col justify-between p-4 sm:p-5">
+              <div class="space-y-2">
+                <p class="text-[10px] uppercase tracking-[0.18em] text-[#7C5C59]">Pediros frescos</p>
+                <h3 class="font-serif text-[1.75rem] leading-none text-chocolate">Berry Cupcake</h3>
+                <p class="text-sm leading-relaxed text-chocolate/70">Cupcakes suaves con crema batida, fresas y un toque dulce artesanal.</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-[0.16em] text-chocolate/60">Por unidad</p>
+                <p class="mt-1 font-serif text-3xl leading-none text-chocolate">Bs. 8</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#E2D4C3] bg-white shadow-md">
+            <div class="h-60 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80" alt="Torta de chocolate" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col justify-between p-4 sm:p-5">
+              <div class="space-y-2">
+                <p class="text-[10px] uppercase tracking-[0.18em] text-[#7C5C59]">A elegir</p>
+                <h3 class="font-serif text-[1.7rem] leading-[1.02] text-chocolate">Torta de Chocolate</h3>
+                <p class="text-sm leading-relaxed text-chocolate/70">Bizcochuelo húmedo, ganache intenso y un acabado sobrio, profundo y elegante.</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-[0.16em] text-chocolate/60">Por unidad</p>
+                <p class="mt-1 font-serif text-3xl leading-none text-chocolate">Bs. 15</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#E2D4C3] bg-white shadow-md">
+            <div class="h-60 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80" alt="Pan artesanal" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col justify-between p-4 sm:p-5">
+              <div class="space-y-2">
+                <p class="text-[10px] uppercase tracking-[0.18em] text-[#7C5C59]">Panadería</p>
+                <h3 class="font-serif text-[1.75rem] leading-none text-chocolate">Pan Integral</h3>
+                <p class="text-sm leading-relaxed text-chocolate/70">Horneado artesanalmente con semillas, aroma a masa madre y textura dorada.</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-[0.16em] text-chocolate/60">Por unidad</p>
+                <p class="mt-1 font-serif text-3xl leading-none text-chocolate">Bs. 12</p>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -265,7 +339,7 @@
 
           <div class="grid gap-6 md:grid-cols-3">
             <article class="watermark rounded-3xl border border-[#E2D4C3] bg-white p-8 shadow-md">
-              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 17l6-6 4 4 8-8" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M14 7h7v7" />
@@ -277,7 +351,7 @@
               </p>
             </article>
             <article class="watermark rounded-3xl border border-[#E2D4C3] bg-white p-8 shadow-md">
-              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
                 </svg>
@@ -288,7 +362,7 @@
               </p>
             </article>
             <article class="watermark rounded-3xl border border-[#E2D4C3] bg-white p-8 shadow-md">
-              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -414,7 +488,7 @@
                   </div>
                 </div>
 
-                <div class="mt-6 flex items-end justify-between rounded-2xl bg-chocolate px-5 py-4 text-white shadow-card">
+                <div class="mt-6 flex items-end justify-between rounded-2xl bg-[#725752] px-5 py-4 text-white shadow-card">
                   <div>
                     <p class="text-xs uppercase tracking-[0.16em] text-white/80">Costo de receta</p>
                     <p class="font-serif text-3xl">Bs. 18.50</p>
@@ -430,7 +504,7 @@
 
           <div class="mt-14 grid gap-6 md:grid-cols-3">
             <div class="rounded-3xl border border-[#E2D4C3] bg-white p-6 text-center shadow-md">
-              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h4l1-2h8l1 2h4v12H3V7z" />
                   <circle cx="12" cy="13" r="3" />
@@ -440,7 +514,7 @@
               <p class="mt-2 text-sm text-chocolate/70">Una foto a la receta escrita a mano. BakeIA identifica ingredientes y cantidades.</p>
             </div>
             <div class="rounded-3xl border border-[#E2D4C3] bg-white p-6 text-center shadow-md">
-              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M8 8h3M8 12h3M16 7l3 5-3 5" />
                 </svg>
@@ -449,7 +523,7 @@
               <p class="mt-2 text-sm text-chocolate/70">Cambia el precio de la harina una vez y se actualizan todas las recetas afectadas.</p>
             </div>
             <div class="rounded-3xl border border-[#E2D4C3] bg-white p-6 text-center shadow-md">
-              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F1EA] text-chocolate">
+              <span class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#EACFD2] text-chocolate">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8v10H8zM7 7h10l-1 3H8L7 7z" />
                 </svg>
